@@ -33,7 +33,38 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 
 ## Write the code to begin your caching pattern setup here.
 
+try:
+  twitterFile = open("twitterData.txt", 'r') # Try to read the data from the file
+  cache_contents = twitterFile.read() # If it's there, get it into a string
+  CACHE_DICTION = json.loads(cache_contents) # And then load it into a dictionary
+  twitterFile.close() # Close the file, we're good, we got the data in a dictionary.
+except:
+  CACHE_DICTION = {} # If there wasn't any data, then the dictionary should be empty. We're gonna rely on this dictionary existing to check if we have any data saved yet. 
 
+def getWithCaching(consumerKey, consumerSecret, accessToken, accessSecret, searchQuery):
+  """grab live Twitter data from your user timeline and cache it"""
+  if not consumer_secret or not consumer_key:
+    print ("You need to fill in client_key and client_secret.")
+    exit()
+
+  results_url = api.search(q=searchQuery)
+
+  if searchQuery in CACHE_DICTION: # if we've already made this request
+    # print('using cache')
+      # use stored response
+    response_text = CACHE_DICTION[searchQuery] # grab the data from the cache
+  else: # otherwise
+    # print('fetching')
+    results = results_url
+    CACHE_DICTION[searchQuery] = results   
+
+    #cache data
+    twitterFile = open('twitterData.txt', 'w')
+    twitterFile.write(json.dumps(CACHE_DICTION))
+    twitterFile.close()
+
+    response_text = CACHE_DICTION[searchQuery] # whichver way we got the data, load it into a python object
+  return response_text # and return it from the function!
 
 
 ## PART 1 - Define a function find_urls.
