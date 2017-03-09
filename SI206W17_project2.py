@@ -173,15 +173,17 @@ def get_five_tweets(searchQuery):
 		lst.append(tweet["text"])
 	return lst
 
-print(get_five_tweets("Love"))
+
 ## PART 3 (b) - Write one line of code to invoke the get_five_tweets function with the phrase "University of Michigan" and save the result in a variable five_tweets.
-
-
+five_tweets = get_five_tweets("University of Michigan")
 
 
 ## PART 3 (c) - Iterate over the five_tweets list, invoke the find_urls function that you defined in Part 1 on each element of the list, and accumulate a new list of each of the total URLs in all five of those tweets in a variable called tweet_urls_found. 
-
-
+tweet_urls_found = []
+for tweet in five_tweets:
+	urls = find_urls(tweet)
+	if (urls) != []:
+		tweet_urls_found += urls
 
 
 
@@ -242,12 +244,12 @@ class PartThree(unittest.TestCase):
 		self.assertEqual(type(get_five_tweets("McGill University")),type([]),"Testing that get_five_tweets returns a list")
 	def test_get_tweets_element_type(self):
 		self.assertEqual(type(get_five_tweets("University of Michigan")[1]),type(u""), "Testing that an element of the return val of get_tweets is a Unicode string")
-# 	def test_five_tweets(self):
-# 		self.assertEqual(type(five_tweets),type([]))
-# 	def test_five_tweets_len(self):
-# 		self.assertEqual(len(five_tweets),5)
-# 	def test_tweet_urls_found(self):
-# 		self.assertEqual(set([x[:4] for x in tweet_urls_found]),set(["http"]),"Testing that each element in tweet_urls_found list is a URL begin. with HTTP")
+	def test_five_tweets(self):
+		self.assertEqual(type(five_tweets),type([]))
+	def test_five_tweets_len(self):
+		self.assertEqual(len(five_tweets),5)
+	def test_tweet_urls_found(self):
+		self.assertEqual(set([x[:4] for x in tweet_urls_found]),set(["http"]),"Testing that each element in tweet_urls_found list is a URL begin. with HTTP")
 
 if __name__ == "__main__":
 	unittest.main(verbosity=2)
