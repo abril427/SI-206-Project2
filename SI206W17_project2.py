@@ -42,29 +42,29 @@ try:
 except:
   CACHE_DICTION = {} # If there wasn't any data, then the dictionary should be empty. We're gonna rely on this dictionary existing to check if we have any data saved yet. 
 
-def getWithCaching(consumerKey, consumerSecret, accessToken, accessSecret, umsi_directory_data, twitter_University_of_Michigan):
+def getWithCaching(consumerKey, consumerSecret, accessToken, accessSecret, umsi_directory_data, searchQuery):
   """grab live Twitter data from your user timeline and cache it"""
   if not consumer_secret or not consumer_key:
     print ("You need to fill in client_key and client_secret.")
     exit()
 
-  results_url = api.search(q=twitter_University_of_Michigan)
+  results_url = api.search(q=searchQuery)
 
-  if twitter_University_of_Michigan in CACHE_DICTION: # if we've already made this request
+  if searchQuery in CACHE_DICTION: # if we've already made this request
     # print('using cache')
       # use stored response
-    response_text = CACHE_DICTION[twitter_University_of_Michigan] # grab the data from the cache
+    response_text = CACHE_DICTION["twitter_"+searchQuery] # grab the data from the cache
   else: # otherwise
     # print('fetching')
     results = results_url
-    CACHE_DICTION[twitter_University_of_Michigan] = results   
+    CACHE_DICTION["twitter_"+searchQuery] = results   
 
     #cache data
     jsonFile = open('206project2_caching.json', 'w')
     jsonFile.write(json.dumps(CACHE_DICTION))
     jsonFile.close()
 
-    response_text = CACHE_DICTION[twitter_University_of_Michigan] # whichver way we got the data, load it into a python object
+    response_text = CACHE_DICTION["twitter_"+searchQuery] # whichver way we got the data, load it into a python object
   return response_text # and return it from the function!
 
 
@@ -165,8 +165,8 @@ get_umsi_data()
 ## Behavior: See instructions. Should search for the input string on twitter and get results. Should check for cached data, use it if possible, and if not, cache the data retrieved.
 ## RETURN VALUE: A list of strings: A list of just the text of 5 different tweets that result from the search.
 
-def get_five_tweets(searchQuery):
-	tweets = getWithCaching(consumer_key, consumer_secret, access_token, access_token_secret, {}, searchQuery)
+def get_five_tweets(search):
+	tweets = getWithCaching(consumer_key, consumer_secret, access_token, access_token_secret, {}, search)
 	five_tweets = tweets["statuses"]
 	lst = []
 	for tweet in five_tweets[0:5]:
@@ -183,8 +183,7 @@ tweet_urls_found = []
 for tweet in five_tweets:
 	urls = find_urls(tweet)
 	if (urls) != []:
-		tweet_urls_found += urls
-
+		tweet_urls_found +=urls 
 
 
 ########### TESTS; DO NOT CHANGE ANY CODE BELOW THIS LINE! ###########
