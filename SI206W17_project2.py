@@ -42,30 +42,7 @@ try:
 except:
   CACHE_DICTION = {} # If there wasn't any data, then the dictionary should be empty. We're gonna rely on this dictionary existing to check if we have any data saved yet. 
 
-def getWithCaching(consumerKey, consumerSecret, accessToken, accessSecret, searchQuery):
-  """grab live Twitter data from your user timeline and cache it"""
-  if not consumer_secret or not consumer_key:
-    print ("You need to fill in client_key and client_secret.")
-    exit()
 
-  results_url = api.search(q=searchQuery)
-
-  if searchQuery in CACHE_DICTION: # if we've already made this request
-    # print('using cache')
-      # use stored response
-    response_text = CACHE_DICTION[searchQuery] # grab the data from the cache
-  else: # otherwise
-    # print('fetching')
-    results = results_url
-    CACHE_DICTION[searchQuery] = results   
-
-    #cache data
-    twitterFile = open('206project2_caching.json', 'w')
-    twitterFile.write(json.dumps(CACHE_DICTION))
-    twitterFile.close()
-
-    response_text = CACHE_DICTION[searchQuery] # whichver way we got the data, load it into a python object
-  return response_text # and return it from the function!
 
 
 ## PART 1 - Define a function find_urls.
@@ -79,12 +56,16 @@ def getWithCaching(consumerKey, consumerSecret, accessToken, accessSecret, searc
 
 def find_urls(string):
 	urls = []
-	urls = re.findall('http://.+?\.com', string) # develop regex for http://
+	url_group = []
+	# urls = re.findall('(http://.+?)\s|(https://.+?)\s', string) # develop regex for http://
+	url_group = re.findall('((http|https)://.+?)\s', string)
+	for url in url_group:
+		urls.append(url[0])
 	return urls 
 
-print ('this is testing URLS *****' )
-urls = find_urls("I love looking at websites like http://etsy.com and http://instagram.com and stuff")
-print(urls)
+# print ('this is testing URLS *****' )
+# urls = find_urls("I love looking at websites like http://etsy.com and http://instagram.com and stuff")
+# print(urls)
 
 ## PART 2 (a) - Define a function called get_umsi_data.
 ## INPUT: N/A. No input.
@@ -96,8 +77,25 @@ print(urls)
 ## Start with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All  
 ## End with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=11 
 
+def get_umsi_data():
+	# if searchQuery in CACHE_DICTION: # if we've already made this request
+ #    # print('using cache')
+ #      # use stored response
+ #    response_text = CACHE_DICTION[searchQuery] # grab the data from the cache
+ #  else: # otherwise
+ #    # print('fetching')
+ #    results = results_url
+ #    CACHE_DICTION[searchQuery] = results   
 
+ #    #cache data
+ #    twitterFile = open('twitterData.txt', 'w')
+ #    twitterFile.write(json.dumps(CACHE_DICTION))
+ #    twitterFile.close()
 
+ #    response_text = CACHE_DICTION[searchQuery] # whichver way we got the data, load it into a python object
+ #  return response_text # and return it from the function!
+
+ return none 
 
 
 
@@ -116,7 +114,30 @@ print(urls)
 ## Behavior: See instructions. Should search for the input string on twitter and get results. Should check for cached data, use it if possible, and if not, cache the data retrieved.
 ## RETURN VALUE: A list of strings: A list of just the text of 5 different tweets that result from the search.
 
+# def getWithCaching(consumerKey, consumerSecret, accessToken, accessSecret, umsi_directory_data, twitter_University_of_Michigan):
+#   """grab live Twitter data from your user timeline and cache it"""
+#   if not consumer_secret or not consumer_key:
+#     print ("You need to fill in client_key and client_secret.")
+#     exit()
 
+#   results_url = api.search(q=twitter_University_of_Michigan)
+
+#   if twitter_University_of_Michigan in CACHE_DICTION: # if we've already made this request
+#     # print('using cache')
+#       # use stored response
+#     response_text = CACHE_DICTION[twitter_University_of_Michigan] # grab the data from the cache
+#   else: # otherwise
+#     # print('fetching')
+#     results = results_url
+#     CACHE_DICTION[twitter_University_of_Michigan] = results   
+
+#     #cache data
+#     twitterFile = open('206project2_caching.json', 'w')
+#     twitterFile.write(json.dumps(CACHE_DICTION))
+#     twitterFile.close()
+
+#     response_text = CACHE_DICTION[twitter_University_of_Michigan] # whichver way we got the data, load it into a python object
+#   return response_text # and return it from the function!
 
 
 ## PART 3 (b) - Write one line of code to invoke the get_five_tweets function with the phrase "University of Michigan" and save the result in a variable five_tweets.
