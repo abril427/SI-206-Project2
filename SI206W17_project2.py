@@ -97,27 +97,39 @@ def find_urls(string):
 ## End with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=11 
 
 def get_umsi_data():
-	base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All'
+	
 	if 'umsi_directory_data' in CACHE_DICTION:
 		return CACHE_DICTION['umsi_directory_data']
 	else:
 		# print('fetching')
-		umsi_data = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
+		
 		# CACHE_DICTION[umsi_directory_data] = results 
-		htmldoc = umsi_data.text
+		# htmldoc = umsi_data.text
 
-		soup = BeautifulSoup(htmldoc,"html.parser")
-		# print(soup)
+		
+		# # print(soup)
 		umsi_pages = []
-		if (soup.find("div",{"class":"pager-current"}) != "12 of 12"):
-			page = soup.find("div",{"id":"body-inside"})
-			umsi_pages.append(page)
+		page = 0
+		while page < 12:
+			url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All' 
+			# umsi_pages = 
+	# umsi_pages = soup.find_all("li",{"class":"pager-next"})
+		# 	umsi_pages.append((i))
+			umsi_data = requests.get(url, headers={'User-Agent': 'SI_CLASS'}).text
+			soup = BeautifulSoup(umsi_data,"html.parser")
+			umsi_pages.append(soup)
+			url = url+'&page='+str(page)
+			# print(url)
+			page+=1
 		return(umsi_pages)
+		
+
 		##cache diction
 		#jsonfile = open("206project2_caching.json", 'w') 
   	#jsonfile.write(json.dumps(CACHE_DICTION))
   	#jsonfile.close()
   	# print(umsi_pages)
+
 
 
 get_umsi_data()
@@ -183,7 +195,7 @@ tweet_urls_found = []
 for tweet in five_tweets:
 	urls = find_urls(tweet)
 	if (urls) != []:
-		tweet_urls_found +=urls 
+		tweet_urls_found +=urls 	
 
 
 ########### TESTS; DO NOT CHANGE ANY CODE BELOW THIS LINE! ###########
